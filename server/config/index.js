@@ -7,4 +7,5 @@ if (result.error) {
 module.exports = {
   MONGODB_USER: process.env.MONGODB_USER,
   MONGODB_PASWORD: process.env.MONGODB_PASWORD,
+  PORT: process.env.PORT || 3005
 };
