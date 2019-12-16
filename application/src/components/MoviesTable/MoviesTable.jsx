@@ -16,13 +16,31 @@ import CreateIcon from '@material-ui/icons/Create';
 import MoviesDialog from '../MoviesDialog/MoviesDialog';
 
 import withHocs from './MoviesTableHoc';
+import MoviesSearch from '../MoviesSearch/MoviesSearch'
 
 
 class MoviesTable extends React.Component {
   state = {
     anchorEl: null,
     openDialog: false,
+    name: ''
   };
+
+  handleChange = name => (event) => {
+    this.setState({ [name]: event.target.value})
+  }
+
+  handleSearch = (e) => {
+    const { data }  = this.props;
+    const { name } = this.state;
+
+    if (e.charCode === 13) {
+      data.fetchMore({
+        variables: {name},
+        updateQuery: (previousResult, {fetchMoreResult}) => fetchMoreResult,
+      })
+    }
+  }
 
   handleDialogOpen = () => { this.setState({ openDialog: true }); };
   handleDialogClose = () => { this.setState({ openDialog: false }); };
@@ -47,7 +65,7 @@ class MoviesTable extends React.Component {
   };
 
   render() {
-    const { anchorEl, openDialog, data: activeElem = {} } = this.state;
+    const { anchorEl, openDialog, data: activeElem = {}, name } = this.state;
 
     const { classes, data = {} } = this.props;
     const { movies = [] } = data;
@@ -56,6 +74,9 @@ class MoviesTable extends React.Component {
 
     return (
       <>
+        <Paper>
+          <MoviesSearch name={name} handleChange={this.handleChange} handleSearch={this.handleSearch} />
+        </Paper>
         <MoviesDialog open={openDialog} handleClose={this.handleDialogClose} id={activeElem.id} />
         <Paper className={classes.root}>
           <Table>
