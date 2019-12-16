@@ -107,9 +107,9 @@ const Mutation = new GraphQLObjectType({
         name: { type: new GraphQLNonNull(GraphQLString) },
         age: { type: new GraphQLNonNull(GraphQLInt) }
       },
-      resolve(parent, { name, age }) {
+      resolve(parent, { id, name, age }) {
         return Directors.findByIdAndUpdate(
-          args.id,
+          id,
           {
             $set: {
               name,
